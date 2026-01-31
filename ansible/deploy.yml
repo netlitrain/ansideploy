@@ -1,0 +1,43 @@
+---
+- name: Deploy Docker container on worker node
+  hosts: worker
+  become: true
+
+  vars:
+    image_name: myapp
+    image_tag: latest
+    container_name: myapp-container
+    container_port: 8080
+    host_port: 8080
+
+  tasks:
+
+    - name: Build Docker image
+      docker_image:
+        name: "{{ image_name }}"
+        tag: "{{ image_tag }}"
+        build:
+          path: "{{ playbook_dir }}/.."
+        source: build
+        force_source: yes
+
+    - name: Stop existing container (if running)
+      docker_container:
+        name: "{{ container_name }}"
+        state: stopped
+      ignore_errors: true
+
+    - name: Remove existing container
+      docker_container:
+        name: "{{ container_name }}"
+        state: absent
+      ignore_errors: true
+
+    - name: Run new container
+      docker_container:
+        name: "{{ container_name }}"
+        image: "{{ image_name }}:{{ image_tag }}"
+        state: started
+        restart_policy: always
+        ports:
+          - "{{ host_port }}:{{ container_port }}"
