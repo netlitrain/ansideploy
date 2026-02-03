@@ -19,6 +19,8 @@ pipeline {
                 ansiblePlaybook(
                     playbook: 'ansible/deploy.yml',
                     inventory: 'ansible/inventory',
+                    become(true),
+                    becomeUser("user"),
                     extras: """
                       --extra-vars
                       image_name=${IMAGE_NAME}
