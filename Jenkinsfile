@@ -1,5 +1,5 @@
 pipeline {
-    agent { label '${LABEL_NAME}' }
+    agent { label 'netligent' }
 
     environment {
         IMAGE_NAME = "myapp"
