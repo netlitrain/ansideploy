@@ -5,6 +5,7 @@ pipeline {
         IMAGE_NAME = "myapp"
         IMAGE_TAG = "${BUILD_NUMBER}"
         CONTAINER_NAME = "myapp-container"
+        ANSIBLE_SSH_ID = "ubuntukikey"
     }
 
     stages {
@@ -18,9 +19,8 @@ pipeline {
             steps {
                 ansiblePlaybook(
                     playbook: 'ansible/deploy.yml',
-                    inventory: 'ansible/inventory',
-                    become(true),
-                    becomeUser("user"),
+                    inventory: 'ansible/hosts.ini',
+                    credentialsId: '${ANSIBLE_SSH_ID}',
                     extras: """
                       --extra-vars
                       image_name=${IMAGE_NAME}
