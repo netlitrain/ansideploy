@@ -22,10 +22,7 @@ pipeline {
                     inventory: 'ansible/hosts.ini',
                     credentialsId: '${ANSIBLE_SSH_ID}',
                     extras: """
-                      --extra-vars
-                      image_name=${IMAGE_NAME}
-                      image_tag=${IMAGE_TAG}
-                      container_name=${CONTAINER_NAME}
+                      --extra-vars image_name=${IMAGE_NAME} image_tag=${IMAGE_TAG} container_name=${CONTAINER_NAME}
                     """,
                     colorized: true,
                     disableHostKeyChecking: true,
